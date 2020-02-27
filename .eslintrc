@@ -1,23 +1,19 @@
 {
   "extends": "eslint:recommended",
   "parserOptions": {
-    "ecmaVersion": 8,
+    "ecmaVersion": 9,
     "ecmaFeatures": {
       "impliedStrict": true
     },
     "sourceType": "module"
   },
   "env": {
-    "browser": true,
-    "es6": true,
-    "node": true
-  },
-  "globals": {
-    "QUnit": false
+    "node": true,
+    "es6": true
   },
   "rules": {
     "eqeqeq": ["error", "always"],
-    "no-console": "warn",
+    "no-console": "off",
     "indent": [
       "error",
       4,
@@ -52,7 +48,11 @@
     "space-infix-ops": "error",
     "object-curly-spacing": ["error", "always"],
     "comma-spacing": "error",
-    "space-before-function-paren": ["error", "never"],
+    "space-before-function-paren": ["error", {
+        "anonymous": "never",
+        "named": "never",
+        "asyncArrow": "always"
+    }],
     "keyword-spacing": [
       "error",
       {
