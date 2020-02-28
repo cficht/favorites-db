@@ -14,7 +14,12 @@ async function run() {
             );
         
             CREATE TABLE favorites (
-                id VARCHAR(64) PRIMARY KEY
+                id SERIAL PRIMARY KEY,
+                name VARCHAR(256) NOT NULL,
+                metacritic INTEGER NOT NULL,
+                background_image VARCHAR(256) NOT NULL,
+                released VARCHAR(256) NOT NULL,
+                user_id INTEGER NOT NULL REFERENCES users(id)
             );
         `);
 

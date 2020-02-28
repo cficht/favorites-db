@@ -48,7 +48,7 @@ const authRoutes = createAuthRoutes({
 // before ensure auth, but after other middleware:
 app.use('/api/auth', authRoutes);
 const ensureAuth = require('./lib/auth/ensure-auth');
-app.use('/api', ensureAuth);
+app.use('/api/me', ensureAuth);
 
 // API Routes
 app.get('/api/videogames', async (req, res) => {
@@ -64,17 +64,14 @@ app.get('/api/videogames', async (req, res) => {
     }
 });
 
-app.post('/api/todos', async (req, res) => {
+app.get('/api/me/favorites', async (req, res) => {
     try {
-        const result = await client.query(`
-            INSERT INTO todos (task, complete, user_id)
-            VALUES ($1, $2, $3)
-            RETURNING *;
-            
-        `,
-        [req.body.task, false, req.userId]);
-
-        res.json(result.rows[0]);
+        const myQuery = `
+        SELECT * FROM favorites
+        WHERE user_id=$1
+        `;
+        const favorites = await client.query(myQuery, [req.userId]);
+        res.json(favorites.rows);
     }
     catch (err) {
         console.log(err);
@@ -84,16 +81,14 @@ app.post('/api/todos', async (req, res) => {
     }
 });
 
-app.put('/api/todos/:id', async (req, res) => {
+app.post('/api/me/favorites', async (req, res) => {
     try {
-        const result = await client.query(`
-            UPDATE todos
-            SET complete=$1
-            WHERE id = $2
-            RETURNING *;
-        `, [req.body.complete, req.params.id]);
-
-        res.json(result.rows[0]);
+        const newFavorites = await client.query(`
+        INSERT INTO favorites (name, metacritic, background_image, released, user_id)
+        values ($1, $2, $3, $4, $5)
+        `, [req.body.name, req.body.metacritic, req.body.background_image, req.body.released, req.userId]);
+        
+        res.json(newFavorites.rows[0]);
     }
     catch (err) {
         console.log(err);
@@ -103,26 +98,11 @@ app.put('/api/todos/:id', async (req, res) => {
     }
 });
 
-app.delete('/api/todos/:id', async (req, res) => {
-    try {
-        const result = await client.query(`
-            DELETE FROM todos
-            WHERE todos.id=$1;        
-        `, [req.params.id]);
 
-        res.json(result.rows[0]);
-    }
-    catch (err) {
-        console.log(err);
-        res.status(500).json({
-            error: err.message || err
-        });
-    }
-});
 
-app.get('*', (req, res) => {
-    res.send('No todos are here...');
-});
+// app.get('*', (req, res) => {
+//     res.send('No favorites are here...');
+// });
 
 // Start the server
 app.listen(PORT, () => {
