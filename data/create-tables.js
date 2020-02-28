@@ -10,13 +10,11 @@ async function run() {
             CREATE TABLE users (
                 id SERIAL PRIMARY KEY,
                 email VARCHAR(256) NOT NULL,
-                hash VARCHAR(512) NOT NULL,
-                display_name VARCHAR(256) NOT NULL
+                hash VARCHAR(512) NOT NULL
             );
         
             CREATE TABLE favorites (
-                id VARCHAR(64) PRIMARY KEY,
-                -- your data columns
+                id VARCHAR(64) PRIMARY KEY
             );
         `);
 
