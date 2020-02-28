@@ -86,6 +86,7 @@ app.post('/api/me/favorites', async (req, res) => {
         const newFavorites = await client.query(`
         INSERT INTO favorites (name, metacritic, background_image, released, user_id)
         values ($1, $2, $3, $4, $5)
+        RETURNING *
         `, [req.body.name, req.body.metacritic, req.body.background_image, req.body.released, req.userId]);
         
         res.json(newFavorites.rows[0]);
@@ -103,6 +104,7 @@ app.delete('/api/me/favorites/:id', async (req, res) => {
         const delFavorite = await client.query(`
         DELETE FROM favorites
         WHERE favorites.id=$1
+        RETURNING *
         `, [req.params.id]);
         
         res.json(delFavorite.rows);
