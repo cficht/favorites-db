@@ -115,11 +115,9 @@ app.delete('/api/me/favorites/:id', async (req, res) => {
     }
 });
 
-
-
-// app.get('*', (req, res) => {
-//     res.send('No favorites are here...');
-// });
+app.get('*', (req, res) => {
+    res.send('No favorites are here...');
+});
 
 // Start the server
 app.listen(PORT, () => {
