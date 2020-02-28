@@ -84,10 +84,10 @@ app.get('/api/me/favorites', async (req, res) => {
 app.post('/api/me/favorites', async (req, res) => {
     try {
         const newFavorites = await client.query(`
-        INSERT INTO favorites (name, metacritic, background_image, released, user_id)
+        INSERT INTO favorites (name, rating, background_image, released, user_id)
         values ($1, $2, $3, $4, $5)
         RETURNING *
-        `, [req.body.name, req.body.metacritic, req.body.background_image, req.body.released, req.userId]);
+        `, [req.body.name, req.body.rating, req.body.background_image, req.body.released, req.userId]);
         
         res.json(newFavorites.rows[0]);
     }
